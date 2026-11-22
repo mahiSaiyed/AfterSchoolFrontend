@@ -103,5 +103,18 @@ onMounted(async () => {
                 </div>
             </div>
         </section>
+        <ShoppingCart
+            v-else
+            :cart="cart"
+            :name="name"
+            :phone="phone"
+            :valid-name="validName"
+            :valid-phone="validPhone"
+            :can-checkout="canCheckout"
+            @remove="removeFromCart"
+            @browse="showCart = false"
+            @update-name="name = $event"
+            @update-phone="phone = $event"
+            @checkout="checkout" />
     </main>
 </template>

@@ -71,6 +71,23 @@ async function loadLessons() {
         loading.value = false;
     }
 }
+
+const sortedLessons = computed(() =>
+    [...lessons.value].sort((a, b) => {
+        const left = a[sortBy.value];
+        const right = b[sortBy.value];
+        const comparison =
+            typeof left === "number"
+                ? left - right
+                : String(left ?? "").localeCompare(
+                      String(right ?? ""),
+                      undefined,
+                      { sensitivity: "base" },
+                  );
+        return sortDirection.value === "asc" ? comparison : -comparison;
+    }),
+);
+
 async function loadTeachers() {
     teachers.value = await request("/teachers");
 }

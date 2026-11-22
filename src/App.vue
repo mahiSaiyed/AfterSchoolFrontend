@@ -60,6 +60,31 @@ async function loadLessons() {
     }
 }
 
+function addToCart(lesson) {
+    if (lesson.space < 1) return;
+    lesson.space -= 1;
+    const item = cart.value.find((entry) => entry.lessonId === lesson._id);
+    if (item) {
+        item.quantity += 1;
+    } else {
+        cart.value.push({
+            lessonId: lesson._id,
+            topic: lesson.topic,
+            location: lesson.location,
+            price: lesson.price,
+            quantity: 1,
+        });
+    }
+    confirmation.value = "";
+}
+
+function removeFromCart(item) {
+    const lesson = lessonCatalog.value.find(
+        (entry) => entry._id === item.lessonId,
+    );
+    if (lesson) lesson.space += item.quantity;
+    cart.value = cart.value.filter((entry) => entry.lessonId !== item.lessonId);
+}
 //Checkout function
 async function checkout() {
     if (!canCheckout.value) return;

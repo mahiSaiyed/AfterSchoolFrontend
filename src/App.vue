@@ -16,6 +16,18 @@ const loading = ref(true);
 const errorMessage = ref("");
 const confirmation = ref("");
 
+// Validation computed properties
+const validName = computed(() =>
+    /^[A-Za-z]+(?: [A-Za-z]+)*$/.test(name.value.trim()),
+);
+const validPhone = computed(() => /^\d+$/.test(phone.value.trim()));
+const canCheckout = computed(
+    () => cart.value.length > 0 && validName.value && validPhone.value,
+);
+const cartCount = computed(() =>
+    cart.value.reduce((sum, item) => sum + item.quantity, 0),
+);
+
 async function loadLessons() {
     loading.value = true;
     errorMessage.value = "";

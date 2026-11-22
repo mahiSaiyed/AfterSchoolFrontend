@@ -60,6 +60,71 @@ async function loadLessons() {
     }
 }
 
+//Checkout function
+async function checkout() {
+    if (!canCheckout.value) return;
+    errorMessage.value = "";
+    let orderSubmitted = false;
+
+    try {
+        const checkoutItems = cart.value.map((item) => {
+            const lesson = lessonCatalog.value.find(
+                (entry) => entry._id === item.lessonId,
+            );
+            if (!lesson || lesson.space < 0) {
+                throw new Error(
+                    "A lesson is no longer available. Refresh and try again.",
+                );
+            }
+            return { item, lesson };
+        });
+        const order = {
+            name: name.value.trim(),
+            phoneNumber: phone.value.trim(),
+            lessonIDs: cart.value.map((item) => item.lessonId),
+            space: cartCount.value,
+            items: cart.value.map(({ lessonId, quantity }) => ({
+                lessonId,
+                quantity,
+            })),
+        };
+
+        await request("/orders", {
+            method: "POST",
+            body: JSON.stringify(order),
+        });
+        orderSubmitted = true;
+
+        for (const { item, lesson } of checkoutItems) {
+            const updated = await request(
+                `/lessons/${encodeURIComponent(item.lessonId)}`,
+                {
+                    method: "PUT",
+                    body: JSON.stringify({ space: lesson.space }),
+                },
+            );
+            lesson.space = updated.space;
+        }
+
+        cart.value = [];
+        name.value = "";
+        phone.value = "";
+        confirmation.value = "Your order has been submitted.";
+        showCart.value = false;
+    } catch (error) {
+        if (orderSubmitted) {
+            cart.value = [];
+            name.value = "";
+            phone.value = "";
+            showCart.value = false;
+            confirmation.value = "Your order was submitted.";
+            errorMessage.value = `Lesson availability could not be fully updated. Contact the lesson provider before placing another order. ${error.message}`;
+            return;
+        }
+        errorMessage.value = error.message;
+    }
+}
+
 onMounted(async () => {
     await loadLessons();
 });

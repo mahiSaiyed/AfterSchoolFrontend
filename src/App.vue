@@ -99,7 +99,7 @@ onMounted(async () => {
                     v-for="lesson in sortedLessons"
                     :key="lesson._id"
                     class="col">
-                    // Lesson card component
+                    <LessonCard :lesson="lesson" @add="addToCart" />
                 </div>
             </div>
         </section>

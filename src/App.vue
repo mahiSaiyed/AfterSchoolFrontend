@@ -71,6 +71,9 @@ async function loadLessons() {
         loading.value = false;
     }
 }
+async function loadTeachers() {
+    teachers.value = await request("/teachers");
+}
 
 function addToCart(lesson) {
     if (lesson.space < 1) return;
@@ -163,7 +166,16 @@ async function checkout() {
 }
 
 onMounted(async () => {
+    let teachersError = "";
+    try {
+        await loadTeachers();
+    } catch (error) {
+        teachersError = error.message;
+    }
     await loadLessons();
+    if (teachersError && !errorMessage.value) {
+        errorMessage.value = `Unable to load teachers: ${teachersError}`;
+    }
 });
 </script>
 

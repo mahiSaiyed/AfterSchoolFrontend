@@ -190,8 +190,16 @@ onMounted(async () => {
         </div>
 
         <section v-if="!showCart">
-            // Lesson search and filter controls
-
+            <LessonFilters
+                :search-text="searchText"
+                :teachers="teachers"
+                :selected-teacher="selectedTeacher"
+                :sort-by="sortBy"
+                :sort-direction="sortDirection"
+                @search-input="searchLessons"
+                @teacher-change="changeTeacher"
+                @sort-by-change="sortBy = $event"
+                @sort-direction-change="sortDirection = $event" />
             <p v-if="loading">Loading lessons...</p>
             <p v-else-if="lessons.length === 0">
                 No lessons match your search.

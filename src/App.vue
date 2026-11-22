@@ -1,6 +1,6 @@
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
-
+import { request } from "./utils/request.js";
 const lessons = ref([]);
 const lessonCatalog = ref([]);
 const teachers = ref([]);

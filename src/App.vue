@@ -95,6 +95,17 @@ async function loadTeachers() {
     teachers.value = await request("/teachers");
 }
 
+
+function searchLessons(value) {
+    searchText.value = value;
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(loadLessons, 250);
+}
+
+function changeTeacher(value) {
+    selectedTeacher.value = value;
+    loadLessons();
+}
 function addToCart(lesson) {
     if (lesson.space < 1) return;
     lesson.space -= 1;

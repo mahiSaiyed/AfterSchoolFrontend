@@ -1,5 +1,8 @@
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import LessonCard from "./components/LessonCard.vue";
+import LessonFilters from "./components/LessonFilters.vue";
+import ShoppingCart from "./components/ShoppingCart.vue";
 import { request } from "./utils/request.js";
 const lessons = ref([]);
 const lessonCatalog = ref([]);
@@ -194,6 +197,9 @@ onMounted(async () => {
         errorMessage.value = `Unable to load teachers: ${teachersError}`;
     }
 });
+
+onBeforeUnmount(() => clearTimeout(searchTimer));
+
 </script>
 
 <template>

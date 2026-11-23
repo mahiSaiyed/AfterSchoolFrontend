@@ -18,6 +18,7 @@ const phone = ref("");
 const loading = ref(true);
 const errorMessage = ref("");
 const confirmation = ref("");
+let searchTimer;  
 
 // Validation computed properties
 const validName = computed(() =>
@@ -97,6 +98,7 @@ async function loadTeachers() {
 
 
 function searchLessons(value) {
+  console.log("searchLessons called with value:", value);
     searchText.value = value;
     clearTimeout(searchTimer);
     searchTimer = setTimeout(loadLessons, 250);

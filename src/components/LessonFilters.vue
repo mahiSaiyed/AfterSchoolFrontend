@@ -6,7 +6,7 @@ defineProps({
   sortBy: { type: String, required: true },
   sortDirection: { type: String, required: true },
 });
-
+// Define emits for the events that this component will emit
 const emit = defineEmits([
   'search-input',
   'teacher-change',
